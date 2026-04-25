@@ -1,5 +1,10 @@
 [
   {
+    "src": "photos/DSCF4928-1.jpg",
+    "width": 2800,
+    "height": 1812
+  },
+  {
     "src": "photos/DSCF4863-2.jpg",
     "width": 2800,
     "height": 2240
@@ -15,16 +20,6 @@
     "height": 1867
   },
   {
-    "src": "photos/DSCF4228.jpg",
-    "width": 2800,
-    "height": 1867
-  },
-  {
-    "src": "photos/DSCF4387.jpg",
-    "width": 2800,
-    "height": 1867
-  },
-  {
     "src": "photos/DSCF4588-2.jpg",
     "width": 4543,
     "height": 3029
@@ -35,8 +30,13 @@
     "height": 1867
   },
   {
-    "src": "photos/DSCF4928-1.jpg",
+    "src": "photos/DSCF4387.jpg",
     "width": 2800,
-    "height": 1812
+    "height": 1867
+  },
+  {
+    "src": "photos/DSCF4228.jpg",
+    "width": 2800,
+    "height": 1867
   }
 ]

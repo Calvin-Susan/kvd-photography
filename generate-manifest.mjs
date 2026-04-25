@@ -75,13 +75,10 @@ async function readImageSize(filepath) {
       if (buf[i] !== 0xff) return null;
       let marker = buf[i + 1];
       i += 2;
-      // Skip fill bytes (consecutive 0xFF before a real marker).
       while (marker === 0xff && i < buf.length) marker = buf[i++];
-      // Standalone markers without payload.
       if (marker === 0xd8 || marker === 0xd9 || (marker >= 0xd0 && marker <= 0xd7)) {
         continue;
       }
-      // SOFn markers (excluding DHT 0xC4, JPG 0xC8, DAC 0xCC).
       if (
         marker >= 0xc0 &&
         marker <= 0xcf &&
@@ -102,53 +99,45 @@ async function readImageSize(filepath) {
   return null;
 }
 
-let current = [];
+let prior = [];
 try {
-  current = JSON.parse(await readFile(OUT, "utf8"));
-  if (!Array.isArray(current)) current = [];
+  prior = JSON.parse(await readFile(OUT, "utf8"));
+  if (!Array.isArray(prior)) prior = [];
 } catch {
-  current = [];
+  prior = [];
 }
-
-const entries = await readdir(PHOTOS_DIR, { withFileTypes: true });
-const present = new Set(
-  entries
-    .filter((e) => e.isFile() && EXTS.has(path.extname(e.name).toLowerCase()))
-    .map((e) => `${PHOTOS_DIR}/${e.name}`)
-);
 
 const srcOf = (item) => (typeof item === "string" ? item : item?.src);
-
-const toEntry = async (src, prior) => {
-  if (prior && typeof prior === "object" && prior.width && prior.height) {
-    return prior;
-  }
-  const size = await readImageSize(src).catch(() => null);
-  return size ? { src, width: size.width, height: size.height } : { src };
-};
-
 const priorBySrc = new Map(
-  current.filter((e) => srcOf(e)).map((e) => [srcOf(e), e])
+  prior.filter((e) => srcOf(e)).map((e) => [srcOf(e), e])
 );
 
-const kept = [];
-for (const item of current) {
-  const src = srcOf(item);
-  if (!present.has(src)) continue;
-  kept.push(await toEntry(src, item));
+const entries = await readdir(PHOTOS_DIR, { withFileTypes: true });
+const files = entries
+  .filter((e) => e.isFile() && EXTS.has(path.extname(e.name).toLowerCase()))
+  .map((e) => `${PHOTOS_DIR}/${e.name}`);
+
+const items = [];
+for (const src of files) {
+  const old = priorBySrc.get(src);
+  if (old && typeof old === "object" && old.width && old.height) {
+    items.push(old);
+    continue;
+  }
+  const size = await readImageSize(src).catch(() => null);
+  items.push(size ? { src, width: size.width, height: size.height } : { src });
 }
 
-const known = new Set(kept.map(srcOf));
-const newSrcs = [...present].filter((p) => !known.has(p)).sort();
-const added = [];
-for (const src of newSrcs) {
-  added.push(await toEntry(src, priorBySrc.get(src)));
-}
+// Sort by filename, descending — newest camera shots (highest DSCF number)
+// appear first. Uses natural comparison so DSCF1000 sorts after DSCF999.
+const collator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base",
+});
+items.sort((a, b) => collator.compare(b.src, a.src));
 
-const updated = [...kept, ...added];
-await writeFile(OUT, JSON.stringify(updated, null, 2) + "\n");
+await writeFile(OUT, JSON.stringify(items, null, 2) + "\n");
 
-const removed = current.length - kept.length;
 console.log(
-  `photos.json: ${kept.length} kept, ${added.length} added, ${removed} removed (total ${updated.length})`
+  `photos.json: ${items.length} photos sorted by filename (newest first)`
 );
