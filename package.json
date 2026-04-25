@@ -4,6 +4,6 @@
   "private": true,
   "description": "A static photography gallery.",
   "scripts": {
-    "build": "bash generate-manifest.sh"
+    "build": "node generate-manifest.mjs"
   }
 }
