@@ -1,6 +1,5 @@
 (() => {
   const gallery = document.getElementById("gallery");
-  const emptyState = document.getElementById("empty-state");
   const lightbox = document.getElementById("lightbox");
   const lightboxImage = document.getElementById("lightbox-image");
   const lightboxCaption = document.getElementById("lightbox-caption");
@@ -21,11 +20,18 @@
     }
 
     if (photos.length === 0) {
-      emptyState.hidden = false;
+      renderEmptyState();
       return;
     }
 
     renderGallery();
+  }
+
+  function renderEmptyState() {
+    const empty = document.createElement("p");
+    empty.className = "gallery__empty";
+    empty.textContent = "No photos yet.";
+    gallery.appendChild(empty);
   }
 
   function renderGallery() {
