@@ -1,0 +1,9 @@
+{
+  "name": "photography-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A static photography gallery.",
+  "scripts": {
+    "build": "bash generate-manifest.sh"
+  }
+}
