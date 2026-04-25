@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <title>Kyle Van Deusen — Photography</title>
+    <meta name="description" content="A photography catalog by Kyle Van Deusen." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <section class="gallery" id="gallery" aria-label="Photo gallery">
+        <div class="gallery__empty" id="empty-state" hidden>
+          <p>No photos yet.</p>
+          <p class="gallery__empty-hint">Drop images into the <code>photos/</code> folder, then run <code>./generate-manifest.sh</code>.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden>
+      <button class="lightbox__close" id="lightbox-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+      </button>
+
+      <button class="lightbox__nav lightbox__nav--prev" id="lightbox-prev" aria-label="Previous photo">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      </button>
+
+      <figure class="lightbox__figure">
+        <img class="lightbox__image" id="lightbox-image" alt="" />
+        <figcaption class="lightbox__caption" id="lightbox-caption"></figcaption>
+      </figure>
+
+      <button class="lightbox__nav lightbox__nav--next" id="lightbox-next" aria-label="Next photo">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+          <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+        </svg>
+      </button>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
