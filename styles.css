@@ -118,20 +118,6 @@ body {
   color: var(--text-muted);
 }
 
-.gallery__empty-hint {
-  margin-top: 8px;
-  font-size: 14px;
-  color: var(--text-faint);
-}
-
-.gallery__empty code {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 13px;
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(127, 127, 127, 0.12);
-}
-
 /* ---------- Lightbox ---------- */
 
 .lightbox {
